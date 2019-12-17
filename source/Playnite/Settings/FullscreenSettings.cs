@@ -1,12 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Playnite.Common;
 using Playnite.SDK;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Playnite
 {
@@ -118,7 +113,7 @@ namespace Playnite
         [JsonIgnore]
         public const FullscreenButtonPrompts DefaultButtonPrompts = FullscreenButtonPrompts.Xbox;
 
-        private ActiveFullscreenView activeView = ActiveFullscreenView.RecentlyPlayed;
+        private ActiveFullscreenView activeView = ActiveFullscreenView.All;
         public ActiveFullscreenView ActiveView
         {
             get

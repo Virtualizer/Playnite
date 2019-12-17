@@ -3,12 +3,7 @@ using Playnite.Common;
 using Playnite.Converters;
 using Playnite.FullscreenApp.ViewModels;
 using Playnite.Input;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -34,6 +29,7 @@ namespace Playnite.FullscreenApp.Controls.Views
     [TemplatePart(Name = "PART_ElemExtraFilterActive", Type = typeof(FrameworkElement))]
     [TemplatePart(Name = "PART_ElemSearchActive", Type = typeof(FrameworkElement))]
     [TemplatePart(Name = "PART_ListGameItems", Type = typeof(ListBox))]
+    //[TemplatePart(Name = "PART_GameBackground", Type = typeof(Image))]
     [TemplatePart(Name = "PART_ButtonInstall", Type = typeof(ButtonBase))]
     [TemplatePart(Name = "PART_ButtonPlay", Type = typeof(ButtonBase))]
     [TemplatePart(Name = "PART_ButtonSearch", Type = typeof(ButtonBase))]
@@ -217,13 +213,13 @@ namespace Playnite.FullscreenApp.Controls.Views
 
                 ElemBatteryStatus = Template.FindName("PART_ElemBatteryStatus", this) as FrameworkElement;
                 if (ElemBatteryStatus != null)
-                {                    
+                {
                     BindingTools.SetBinding(
                         ElemBatteryStatus,
                         TextBlock.VisibilityProperty,
                         mainModel.AppSettings.Fullscreen,
                         nameof(FullscreenSettings.ShowBattery),
-                        converter: new Converters.BooleanToVisibilityConverter());                    
+                        converter: new Converters.BooleanToVisibilityConverter());
                 }
 
                 TextProgressTooltip = Template.FindName("PART_TextProgressTooltip", this) as TextBlock;
@@ -272,11 +268,11 @@ namespace Playnite.FullscreenApp.Controls.Views
                 {
                     ListGameItems.ItemsPanel = GetItemsPanelTemplate();
                     ListGameItems.InputBindings.Add(new KeyBinding() { Command = mainModel.ToggleGameOptionsCommand, Key = Key.X });
-                    ListGameItems.InputBindings.Add(new KeyBinding() { Command = mainModel.ToggleGameDetailsCommand, Key = Key.A });                    
+                    ListGameItems.InputBindings.Add(new KeyBinding() { Command = mainModel.ToggleGameDetailsCommand, Key = Key.A });
                     ListGameItems.InputBindings.Add(new KeyBinding() { Command = mainModel.ActivateSelectedCommand, Key = Key.Enter });
 
                     ListGameItems.InputBindings.Add(new XInputBinding(mainModel.ToggleGameOptionsCommand, XInputButton.Start));
-                    ListGameItems.InputBindings.Add(new XInputBinding(mainModel.ToggleGameDetailsCommand, XInputButton.A));                    
+                    ListGameItems.InputBindings.Add(new XInputBinding(mainModel.ToggleGameDetailsCommand, XInputButton.A));
                     ListGameItems.InputBindings.Add(new XInputBinding(mainModel.ActivateSelectedCommand, XInputButton.X));
 
                     BindingTools.SetBinding(ListGameItems,
@@ -297,6 +293,16 @@ namespace Playnite.FullscreenApp.Controls.Views
                         FocusBahaviors.FocusBindingProperty,
                         mainModel,
                         nameof(mainModel.GameListFocused));
+                    BindingTools.SetBinding(ListGameItems,
+                        FocusBahaviors.FocusBindingProperty,
+                        mainModel,
+                        nameof(mainModel.GameListFocused));
+
+                    //Image gameBackground = Template.FindName("PART_GameBackground", this) as Image;
+                    //BindingTools.SetBinding(gameBackground,
+                    //    Image.SourceProperty,
+                    //    mainModel,
+                    //    nameof(mainModel.SelectedGame.BackgroundImage));
                 }
 
                 AssignButtonWithCommand(ref ButtonInstall, "PART_ButtonInstall", mainModel.ActivateSelectedCommand);
@@ -316,7 +322,7 @@ namespace Playnite.FullscreenApp.Controls.Views
                     $"{nameof(FullscreenAppViewModel.SelectedGame)}.{nameof(GamesCollectionViewEntry.IsInstalled)}",
                     converter: new Converters.BooleanToVisibilityConverter(),
                     fallBackValue: Visibility.Collapsed);
-                
+
                 AssignButtonWithCommand(ref ButtonDetails, "PART_ButtonDetails", mainModel.ToggleGameDetailsCommand);
                 BindingTools.SetBinding(
                     ButtonDetails,
@@ -335,7 +341,7 @@ namespace Playnite.FullscreenApp.Controls.Views
 
                 AssignButtonWithCommand(ref ButtonSearch, "PART_ButtonSearch", mainModel.OpenSearchCommand);
                 AssignButtonWithCommand(ref ButtonFilter, "PART_ButtonFilter", mainModel.ToggleFiltersCommand);
-                                
+
                 ElemNotifications = Template.FindName("PART_ElemNotifications", this) as FrameworkElement;
                 if (ElemNotifications != null)
                 {

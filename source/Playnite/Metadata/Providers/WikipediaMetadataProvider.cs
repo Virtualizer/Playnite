@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Web;
-using AngleSharp.Dom;
-using AngleSharp.Parser.Html;
+﻿using AngleSharp.Dom;
+using AngleSharp.Html.Parser;
 using Newtonsoft.Json;
 using Playnite.Common.Web;
 using Playnite.SDK;
 using Playnite.SDK.Metadata;
 using Playnite.SDK.Models;
 using Playnite.SDK.Plugins;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Web;
 
 namespace Playnite.Metadata.Providers
 {
@@ -210,7 +208,7 @@ namespace Playnite.Metadata.Providers
         {
             public string title
             {
-                get;set;
+                get; set;
             }
             public string snippet
             {
@@ -271,7 +269,7 @@ namespace Playnite.Metadata.Providers
                     {
                         Title = searchResult.title,
                         Name = searchResult.title,
-                        Description = parser.Parse(searchResult.snippet).DocumentElement.TextContent
+                        Description = parser.ParseDocument(searchResult.snippet).DocumentElement.TextContent
                     });
                 }
 
@@ -297,11 +295,11 @@ namespace Playnite.Metadata.Providers
 
         public GameMetadata ParseGamePage(WikiPage page, string gameName = "")
         {
-            logger.Info("Parsing wiki page " + page.title);            
+            logger.Info("Parsing wiki page " + page.title);
             var gameInfo = new GameInfo();
             var metadata = new GameMetadata() { GameInfo = gameInfo };
             var parser = new HtmlParser();
-            var document = parser.Parse(@"<html><head></head><body>" + page.text["*"] + @"</body></html>?");
+            var document = parser.ParseDocument(@"<html><head></head><body>" + page.text["*"] + @"</body></html>?");
             var tables = document.QuerySelectorAll("table.infobox.hproduct");
 
             if (tables.Length == 0)
@@ -348,7 +346,7 @@ namespace Playnite.Metadata.Providers
 
             // Box art
             var boxartElem = rows[imageRowIndex].GetElementsByTagName("img");
-            string image =  string.Empty;
+            string image = string.Empty;
             if (boxartElem.Length != 0)
             {
                 if (boxartElem[0].HasAttribute("srcset"))
@@ -397,7 +395,7 @@ namespace Playnite.Metadata.Providers
                 {
                     gameInfo.Developers = rowValue.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries)
                         .Select(a => Regex.Replace(a, @"\[\d+\]", "").Trim()).ToList();
-                    
+
                     continue;
                 }
 

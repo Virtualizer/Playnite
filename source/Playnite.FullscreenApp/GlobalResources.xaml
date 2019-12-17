@@ -4,7 +4,7 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <!--
-    THIS FILE IS NOT PART OF THE THEME, DO NOT MODIFY!
+        THIS FILE IS NOT PART OF THE THEME, DO NOT MODIFY!
     -->
 
     <sys:Double x:Key="DesignWidth">1920</sys:Double>
